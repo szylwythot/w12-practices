@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require(`path`);
 
 const app = express();
-const port = "9000";
+const port = "9001";
 
 app.get('/', (request, response, next) => { // ez a sima 
     // console.log("Request recieved.");
@@ -20,6 +20,8 @@ app.get('/something', (request, response, next) => {
     console.log("Request recieved for something endpoint.");
     response.send("Thank you for your request! This is our response for something endpoint.");
 });
+
+const userFile = path.join(`${__dirname}/../frontend/users.json`);
 
 app.get('/api/v1/users', (request, response, next) => {
     console.log("Request recieved for /api/v1/users endpoint.");
@@ -42,7 +44,7 @@ app.get('/api/v1/users', (request, response, next) => {
 
 const getUsersByStatus = (userStatus) => {
     app.get(`/api/v1/users/${userStatus}`, (request, response, next) => {
-        fs.readFile(`../frontend/users.json`, (error, data) =>{
+        fs.readFile(userFile, (error, data) =>{
             if(error){
                 response.send("Error just happened during opening the file.")
             } else {
@@ -63,7 +65,3 @@ const ipAddress = `http://127.0.0.2:${port}`;
 app.listen(port, () => { 
     console.log(ipAddress); 
 });
-
-
-
-
