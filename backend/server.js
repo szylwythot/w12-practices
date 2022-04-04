@@ -23,15 +23,39 @@ app.get('/something', (request, response, next) => {
 
 app.get('/api/v1/users', (request, response, next) => {
     console.log("Request recieved for /api/v1/users endpoint.");
-    const users = [
-        {
-            name : "John",
-            surname : "Doe"
-        }
-    ];
+    response.sendFile(path.join(`${__dirname}/../frontend/users.json`)); 
+    // const users = [
+    //     {
+    //         name : "John",
+    //         surname : "Doe",
+    //         status: "active",
+    //     },
+    //     {
+    //         name : "Jane",
+    //         surname : "Scatch",
+    //         status : "passive",
+    //     }
+    // ];
 
-    response.send(JSON.stringify(users));
+    // response.send(JSON.stringify(users));
 });
+
+const getUsersByStatus = (userStatus) => {
+    app.get(`/api/v1/users/${userStatus}`, (request, response, next) => {
+        fs.readFile(`../frontend/users.json`, (error, data) =>{
+            if(error){
+                response.send("Error just happened during opening the file.")
+            } else {
+                const users = JSON.parse(data);
+                const activeUsers = users.filter( user => user.status === userStatus);
+                response.send(activeUsers);
+            }
+        });
+    });
+}
+
+getUsersByStatus("active");
+getUsersByStatus("passive");
 
 app.use('/pub', express.static(`${__dirname}/../frontend/public`)); // statikus mappa kiszolgálás, mert így nem kell egyesével sendfile-olni
 

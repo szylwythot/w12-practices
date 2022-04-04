@@ -16,9 +16,9 @@ async function  init (event) {
     const result = await parseJSON(`/api/v1/users`);
     const root = document.getElementById("root");
 
-    root.insertAdjacentElement(
+    root.insertAdjacentHTML(
         `beforeend`, 
-        result.map(user => userComponent(user)).json("")
+        result.map(user => userComponent(user)).join("")
     );
 
 }
