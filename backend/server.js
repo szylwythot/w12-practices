@@ -46,7 +46,7 @@ const getUsersByStatus = (userStatus) => {
     app.get(`/api/v1/users/${userStatus}`, (request, response, next) => {
         fs.readFile(userFile, (error, data) =>{
             if(error){
-                response.send("Error just happened during opening the file.")
+                response.send("Error just happened during opening the file.");
             } else {
                 const users = JSON.parse(data);
                 const activeUsers = users.filter( user => user.status === userStatus);
