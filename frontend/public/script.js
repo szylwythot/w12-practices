@@ -27,27 +27,14 @@ const addUserComponent = () => {
 const submitClicked =  (event) => {
     // event.preventDefault();
 
-    // dataToSend.append('cart', JSON.stringify(validCart));
-
     const firstname = document.querySelector(".first-name");
     const surname = document.querySelector(".surname");
-
-    // const dataToSend = new FormData(form);
-    // dataToSend.append('firstName', firstname.value);
-    // dataToSend.append('surname', surname.value);
-
-    // const userFormData = new FormData({
-    //     'firstName': firstname.value,
-    //     'surname': surname.value
-    // });
-
-    // console.log(userFormData.getValue('firstName'));
-    // console.log(userFormData.getValue('surname'));
 
     const userData = {
         'firstName': firstname.value,
         'surname': surname.value
     };
+
     console.log(userData);
 
     const fethSettings = {
@@ -63,8 +50,8 @@ const submitClicked =  (event) => {
             messageRenderer('User has been added!');
         }
     }).then(async (data) => {
-        const user = await data.json();
-        root.insertAdjacentHTML(userComponent(user));
+        // const user = await data.json();
+        // root.insertAdjacentHTML(userComponent(user));
 
     }).catch(error => {
         console.log(error);
