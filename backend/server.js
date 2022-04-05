@@ -79,16 +79,25 @@ app.get(`/api/v1/users_data/:key`, (request, response, next) => {
 
 // 
 app.post('/users/new', (reqest, response) => {
-        fs.readFile(userFile, (error, data) =>{
-            if(error){
-                response.statusCode = 404;
-                response.send("Error just happened during opening the file.");
-            } else {
-                const users = JSON.parse(data);
-                console.log(reqest.body);
-            }
+    fs.readFile(userFile, (error, data) => {
+        if(error){
+            response.statusCode = 404;
+            response.send("Error just happened during opening the file.");
+        } else {
+            const users = JSON.parse(data);
+            console.log(reqest.body);
+            users.push(reqest.body);
+            console.log(users);
+
+            fs.writeFile(userFile, JSON.stringify(users), error => {
+                if(error){
+                    console.log(error);
+                    response.send("Error writing users file.")
+                }
+            })
+            response.send(reqest.body);
+        }
     })
-	
 });
 
 const ipAddress = `http://127.0.0.2:${port}`;

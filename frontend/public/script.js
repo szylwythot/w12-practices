@@ -27,11 +27,11 @@ const addUserComponent = () => {
 const submitClicked =  (event) => {
     // event.preventDefault();
 
-    const firstname = document.querySelector(".first-name");
+    const firstName = document.querySelector(".first-name");
     const surname = document.querySelector(".surname");
 
     const userData = {
-        'firstName': firstname.value,
+        'name': firstName.value,
         'surname': surname.value
     };
 
@@ -45,19 +45,13 @@ const submitClicked =  (event) => {
         body: JSON.stringify(userData)
     }
 
-    fetch('/users/new', fethSettings).then(data => {
-        if (data.status === 200){
-            messageRenderer('User has been added!');
-        }
-    }).then(async (data) => {
-        // const user = await data.json();
-        // root.insertAdjacentHTML(userComponent(user));
+    fetch('/users/new', fethSettings).then(async (data) => {
+        const user = await data.json();
+        root.insertAdjacentHTML(`beforeend`, userComponent(user));
 
     }).catch(error => {
         console.log(error);
     });
-
-    return response.json();
 };
 
 async function  init (event) {
