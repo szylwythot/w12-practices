@@ -5,10 +5,10 @@ const parseJSON = async (url) => {
     return response.json();
 };
 
-const userComponent = ({name, surname}) => { // object destructuring
+const userComponent = ({firstName, surname}) => { // object destructuring
     return `
         <div>
-            <h1>${name}</h1>
+            <h1>${firstName}</h1>
             <h2>${surname}</h2>
         </div>
     `;
