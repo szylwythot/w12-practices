@@ -8,5 +8,10 @@
         "name" : "Jane",
         "surname" : "Scatch",
         "status" : "passive"
+    },
+    {
+        "name" : "Harmadik",
+        "surname" : "Ember",
+        "status" : "passive"
     }
 ]

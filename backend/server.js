@@ -1,4 +1,5 @@
 // requirements
+const { query } = require("express");
 const express = require("express");
 const fs = require('fs');
 const path = require(`path`);
@@ -23,23 +24,55 @@ app.get('/something', (request, response, next) => {
 
 const userFile = path.join(`${__dirname}/../frontend/users.json`);
 
-app.get('/api/v1/users', (request, response, next) => {
-    console.log("Request recieved for /api/v1/users endpoint.");
-    response.sendFile(path.join(`${__dirname}/../frontend/users.json`)); 
-    // const users = [
-    //     {
-    //         name : "John",
-    //         surname : "Doe",
-    //         status: "active",
-    //     },
-    //     {
-    //         name : "Jane",
-    //         surname : "Scatch",
-    //         status : "passive",
-    //     }
-    // ];
+app.get("/api/v1/users-query", (request, response) => { // query stringek a web technológia alap része
+    console.dir(request.query);
+    console.log(request.query.apiKey);
+    if (request.query.apiKey === "apple") {
+        response.sendFile(`${frontend}/users.json`);
+    } else {
+        response.send("Unauthorized request");
+    }
+})
 
-    // response.send(JSON.stringify(users));
+
+app.get('/api/v1/user-params/:key', (request, response, next) => { // ez nem az lap web technológiában van benne, ez az express middleware csinálja
+    console.log(request.params);
+    console.log(request.params.key);
+    
+    if(request.params.key === "alma"){
+        response.send("alma");
+    } else {
+        response.send("hello");
+    }
+    
+});
+
+const userStatuses = ["active", "passive"];
+
+// app.get(`/api/v1/users/:key`, (request, response, next) => {
+app.get(`/api/v1/users_data/:key`, (request, response, next) => {
+    const userStatus = request.params.key;
+    console.log(userStatus);
+
+    // if(userStatus === undefined){
+    //     response.sendFile(userFile);
+    // } else { 
+        if( !userStatuses.includes(userStatus) ){
+            response.statusCode = 404;
+            response.send("Please add valid status in url.");
+        } else{ 
+            fs.readFile(userFile, (error, data) =>{
+                if(error){
+                    response.statusCode = 404;
+                    response.send("Error just happened during opening the file.");
+                } else {
+                    const users = JSON.parse(data);
+                    const usersOfStatus = users.filter( user => user.status === userStatus);
+                    response.send(usersOfStatus);
+                }
+            });
+        }
+    // }
 });
 
 const getUsersByStatus = (userStatus) => {
@@ -54,10 +87,11 @@ const getUsersByStatus = (userStatus) => {
             }
         });
     });
-}
+};
 
-getUsersByStatus("active");
-getUsersByStatus("passive");
+// getUsersByStatus("active");
+// getUsersByStatus("passive");
+
 
 app.use('/pub', express.static(`${__dirname}/../frontend/public`)); // statikus mappa kiszolgálás, mert így nem kell egyesével sendfile-olni
 
